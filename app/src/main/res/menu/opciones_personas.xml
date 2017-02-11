@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/menu_contextual_editar_persona"
+        android:title="@string/opcion_editar_persona">
+    </item>
+    <item
+        android:id="@+id/menu_contextual_eliminar_persona"
+        android:title="@string/opcion_eliminar_persona">
+    </item>
+</menu>

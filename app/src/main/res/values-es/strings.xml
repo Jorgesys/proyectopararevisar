@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Cumpleaños</string>
+    <string name="btn_flo_1">Añadir Persona</string>
+    <string name="btn_flo_2">Copia de seguridad</string>
+    <string name="btn_flo_3">Restaurar</string>
+    <string name="intro_fecha">Introduzca una Fecha</string>
+
+
+    <string-array name="Zodiaco_nombres">
+    <item name="Acuario (Enero 20 / Febrero 18)"></item>
+    <item name="Piscis (Febrero 19 / Marzo 20)"></item>
+    <item name="Aries (Marzo 21 / Abril 19)"></item>
+    <item name="Tauro (Abril 20 / Mayo 20)"></item>
+    <item name="Géminis (Mayo 21 / Junio 20)"></item>
+    <item name="Cáncer (Junio 21 / Julio 22)"></item>
+    <item name="Leo (Julio 23 / Agosto 22)"></item>
+    <item name="Virgo (Agosto 23 / Septiembre 22)"></item>
+    <item name="Libra (Septiembre 23 / Octubre 22)"></item>
+    <item name="Escorpio (Octubre 23 / Noviembre 21)"></item>
+    <item name="Sagitario (Noviembre 22 / Diciembre 21)"></item>
+    <item name="Capricornio (Diciembre 22 / Enero 19)"></item>
+    </string-array>
+
+
+
+</resources>

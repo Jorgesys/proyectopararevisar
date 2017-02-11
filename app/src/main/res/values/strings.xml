@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Birthday</string>
+    <string name="crear_cumpleaños">Añadir Cumpleaños</string>
+    <string name="editTextNombre">Nombre</string>
+    <string name="editTextFecha">Fecha</string>
+    <string name="editTextZodiaco">Zodiaco</string>
+    <string name="agregarImagenPersona">Agregar Imagen</string>
+    <string name="botonGuardar">Guardar</string>
+    <string name="botonBorrar">Borrar</string>
+    <string name="opcion_editar_persona">Editar</string>
+    <string name="opcion_eliminar_persona">Eliminar</string>
+    <string name="btn_flo_1">Add Person</string>
+    <string name="btn_flo_2">Item 2</string>
+    <string name="btn_flo_3">Item 3</string>
+    <string name="intro_fecha">Introduzca una Fecha1 ingles</string>
+</resources>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/base_añadir"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#f4f4f4">
+    <!-- Inicia el ScrollView -->
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <!-- Se colocal el LinearLayout que contendra el formulario -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:layout_marginTop="30dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imagenPersona"
+                android:padding="17dp"
+                android:background="@drawable/sombra_image"
+                android:layout_height="187dp"
+                android:layout_x="29dp"
+                android:layout_y="21dp"
+                android:src="@drawable/icon_sinfoto"
+                android:layout_width="187dp" />
+
+            <EditText
+                android:id="@+id/editTextNombre"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:layout_x="28dp"
+                android:layout_y="149dp"
+                android:ems="10"
+                android:hint="@string/editTextNombre"
+                android:textSize="18sp"
+                android:inputType="textCapWords"
+                android:gravity="center" />
+
+            <EditText
+                android:id="@+id/editTextFecha"
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_x="29dp"
+                android:layout_y="282dp"
+                android:ems="10"
+                android:hint="@string/editTextFecha"
+                android:textSize="18sp"
+                android:gravity="center" />
+
+            <EditText
+                android:id="@+id/editTextZodiaco"
+                android:layout_width="244dp"
+                android:layout_height="wrap_content"
+                android:layout_x="36dp"
+                android:layout_y="349dp"
+                android:ems="10"
+                android:hint="@string/editTextZodiaco"
+                android:inputType="textCapWords"
+                android:textSize="18sp"
+                android:gravity="center" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/botonGuardar"
+                    android:layout_x="91dp"
+                    android:layout_y="405dp"
+                    android:text="@string/botonGuardar"
+                    android:background="@drawable/btn_1"
+                    android:textColor="@android:color/background_light"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="10dp" />
+
+                <Button
+                    android:id="@+id/botonLimpiar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_x="166dp"
+                    android:layout_y="408dp"
+                    android:text="@string/botonBorrar"
+                    android:background="@drawable/btn_1"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/background_light" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</AbsoluteLayout>
