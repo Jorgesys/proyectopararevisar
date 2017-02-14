@@ -78,12 +78,78 @@ public class MainActivity extends AppCompatActivity {
 
         btn_flo_2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                    switch(v.getId()) {
+                        case R.id.icon_btn_flo_2:
+                            exportDB();
+                            break;
+                    }
+                }
+            private void exportDB(){
+                File sd = Environment.getExternalStorageDirectory();
+                File data = Environment.getDataDirectory();
+                FileChannel source=null;
+                FileChannel destination=null;
+                String currentDBPath = "/data/"+ "vrteam.birthday" +"/databases/"+SAMPLE_DB_NAME;
+                File f = new File(Environment.getExternalStorageDirectory() + "/BirthdayBackup");
+                if(!f.isDirectory()) {
+                    String newFolder = "/BirthdayBackup";
+                    String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+                    File myNewFolder = new File(extStorageDirectory + newFolder);
+                    myNewFolder.mkdir(); //creamos la carpeta
+                }else{
+                }
+                String backupDBPath = "BirthdayBackup/"+SAMPLE_DB_NAME;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+                try {
+                    source = new FileInputStream(currentDB).getChannel();
+                    destination = new FileOutputStream(backupDB).getChannel();
+                    destination.transferFrom(source, 0, source.size());
+                    source.close();
+                    destination.close();
+                    Toast.makeText(MainActivity.this, "¡Copia de Seguridad creada correctamente!", Toast.LENGTH_LONG).show();
+                } catch(IOException e) {
+                    Toast.makeText(getApplicationContext(), "Error al crear Copia de Seguridad", Toast.LENGTH_SHORT)
+                            .show();
+                    e.printStackTrace();
+                }
                 btn_flo_menu.close(true);
 
             }
         });
         btn_flo_3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                switch(v.getId()) {
+                    case R.id.icon_btn_flo_3:
+                        ImportDB();
+                        break;
+                }
+            }
+            private void ImportDB(){
+                File sd = Environment.getExternalStorageDirectory();
+                File data = Environment.getDataDirectory();
+                FileChannel source=null;
+                FileChannel destination=null;
+                String currentDBPath = "/data/"+ "vrteam.birthday" +"/databases/"+SAMPLE_DB_NAME;
+                String backupDBPath = "BirthdayBackup/"+SAMPLE_DB_NAME;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+                try {
+                    source = new FileInputStream(backupDB).getChannel();
+                    destination = new FileOutputStream(currentDB).getChannel();
+                    destination.transferFrom(source, 0, source.size());
+                    source.close();
+                    destination.close();
+                    Toast.makeText(MainActivity.this, "Se restauró correctamente", Toast.LENGTH_LONG).show();
+                } catch(IOException e) {
+                    Toast.makeText(getApplicationContext(), "Error al restaurar", Toast.LENGTH_SHORT)
+                            .show();
+                    e.printStackTrace();
+                }
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 btn_flo_menu.close(true);
             }
         });
