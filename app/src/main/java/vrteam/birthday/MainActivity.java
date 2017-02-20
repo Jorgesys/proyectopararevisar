@@ -2,12 +2,16 @@ package vrteam.birthday;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,12 +26,23 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import vrteam.birthday.basedatos.DatabaseHandler;
 import vrteam.birthday.modelos.Persona;
 import vrteam.birthday.utilitarios.ImagenAdapter;
 
 public class MainActivity extends AppCompatActivity {
     // Storage Permissions variables
+
+    private static final String TAG = "MainActivity";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -78,13 +93,15 @@ public class MainActivity extends AppCompatActivity {
 
         btn_flo_2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                    switch(v.getId()) {
-                        case R.id.icon_btn_flo_2:
-                            exportDB();
-                            break;
-                    }
+                switch(v.getId()) {
+                    case R.id.icon_btn_flo_2:
+                        exportDB();
+                        break;
                 }
+            }
             private void exportDB(){
+
+                Log.i(TAG, "inicia exportDB()");
                 File sd = Environment.getExternalStorageDirectory();
                 File data = Environment.getDataDirectory();
                 FileChannel source=null;
@@ -92,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
                 String currentDBPath = "/data/"+ "vrteam.birthday" +"/databases/"+SAMPLE_DB_NAME;
                 File f = new File(Environment.getExternalStorageDirectory() + "/BirthdayBackup");
                 if(!f.isDirectory()) {
+                    Log.i(TAG, "NO es directorio, se procede a crear: " + f.getAbsolutePath());
                     String newFolder = "/BirthdayBackup";
                     String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
                     File myNewFolder = new File(extStorageDirectory + newFolder);
                     myNewFolder.mkdir(); //creamos la carpeta
                 }else{
+                    Log.i(TAG, "es directorio: " + f.getAbsolutePath());
                 }
                 String backupDBPath = "BirthdayBackup/"+SAMPLE_DB_NAME;
                 File currentDB = new File(data, currentDBPath);
@@ -115,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 btn_flo_menu.close(true);
 
+                Log.i(TAG, "termina exportDB()...");
             }
         });
         btn_flo_3.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             private void ImportDB(){
+                Log.e(TAG, "inicia importDB()");
                 File sd = Environment.getExternalStorageDirectory();
                 File data = Environment.getDataDirectory();
                 FileChannel source=null;
@@ -151,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 btn_flo_menu.close(true);
+                Log.e(TAG, "Termina importDB() procede a activar alertas.");
+                activaAlertas();
             }
         });
 
@@ -160,6 +183,52 @@ public class MainActivity extends AppCompatActivity {
         // Asociamos los menús contextuales al listViewPersonas.
         registerForContextMenu(listViewPersonas);
     }
+
+
+    private void activaAlertas(){
+        try{
+            baseDatos = new DatabaseHandler(this);
+            // Devuelve todas las personas en el objeto Cursor.
+            Cursor cursor = baseDatos.obtenerTodasPersonas();
+            if (cursor.moveToFirst()) {
+                // EditarPersonaActivity epa = new EditarPersonaActivity();
+                while (!cursor.isAfterLast()) {
+                    Log.i(TAG, "Activando alarma " + cursor.getString(0) + " para usuario " + cursor.getString(1));
+
+                    Log.i(TAG, " alarma " + cursor.getString(2) );
+                    // setAlarm(Integer.parseInt(cursor.getString(0)));
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+        }catch(Exception e){
+            Log.d("Error", "El mensaje de error es: " + e.getMessage());
+        }finally{
+            baseDatos.cerrar();
+        }
+
+    }
+
+
+    public void setAlarm(int notification_id, String nombre, String fecha) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(sdf.parse(fecha));
+        Intent intent = new Intent(getBaseContext(), vrteam.birthday.notif.AlarmReceiver.class);
+        //los extras
+        intent.putExtra("titulo", nombre);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getBaseContext(),
+                notification_id,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        Log.i(TAG, "Se configura satisfactoriamente alarma con id " + notification_id);
+    }
+
+
 
     /**
      * Metodo publico que se sobreescribe. En este metodo crearmos el menu contextual

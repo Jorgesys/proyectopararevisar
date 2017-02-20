@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +40,7 @@ import vrteam.birthday.utilitarios.Mensaje;
 
 public class EditarPersonaActivity extends Activity {
     // Objetos.
+    private static final String TAG = "EditarPersonaActivity";
     private Button butonLimpiar;
     private Button butonGuardar;
     private EditText editTextNombre;
@@ -146,7 +148,7 @@ public class EditarPersonaActivity extends Activity {
                     } else {
                         try {
                             notification_id = (int)insertarNuevoPersona();
-                            setAlarm(uriAlarm, notification_id);
+                            setAlarm(notification_id);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -167,8 +169,6 @@ public class EditarPersonaActivity extends Activity {
                 }
             }
         });
-
-
         // Limpia los campos.
         butonLimpiar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -261,7 +261,7 @@ public class EditarPersonaActivity extends Activity {
             baseDatos.actualizarRegistros(id, persona.getNombre(),
                     persona.getFecha(), persona.getZodiaco(),
                     persona.getRutaImagen());
-            setAlarm(uriAlarm, id);
+            setAlarm(id);
             mensaje.mostrarMensajeCorto("Se edito correctamente");
         } catch (Exception e) {
             mensaje.mostrarMensajeCorto("Error al querer editarlo, por favor intentelo de nuevo");
@@ -285,7 +285,8 @@ public class EditarPersonaActivity extends Activity {
     }
 
 
-    private void setAlarm(Uri passuri, int notification_id) throws ParseException {
+    // public void setAlarm(Uri passuri, int notification_id) throws ParseException {
+    public void setAlarm(int notification_id) throws ParseException {
 
         System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
@@ -302,17 +303,8 @@ public class EditarPersonaActivity extends Activity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-
+        Log.i(TAG, "Se configura satisfactoriamente alarma con id " + notification_id);
     }
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -432,4 +424,4 @@ public class EditarPersonaActivity extends Activity {
         bitmap = BitmapFactory.decodeFile(ruta_imagen, opciones);
         return bitmap;
     }
-        }
+}
